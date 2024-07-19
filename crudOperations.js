@@ -1,5 +1,6 @@
 // Import utility functions
 import { getResourceId, processBodyFromRequest, returnErrorWithMessage } from './utils.js';
+import pg from 'pg';
 
 export const createPost = async (req, res) => {
   try {
