@@ -16,9 +16,17 @@ export const createPost = async (req, res) => {
       connectionString: process.env.PG.URI,
     });
     console.log('Here we have access to the body: ', parsedBody);
+
+    // ****
+    const result = await client.query('INSERT INTO posts (title, author, content) VALUES ($1, $2, $3) RETURNING *;',
+      [parsedBody.title, parsedBody.author, parsedBody.content]
+    );
+    console.log('result', result);
+
+    await client.end();
     res.statusCode = 201;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ message: 'Post created' }));
+    res.end(JSON.stringify({ message: 'Post created', result: result.rows[0] }));
   } catch (error) {
     returnErrorWithMessage(res);
   }
